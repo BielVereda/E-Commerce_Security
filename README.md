@@ -35,13 +35,13 @@ Este projeto implementa um backend completo com operações CRUD, relacionamento
 
 ```
 com.projeto.ecommerce
-│
-├── controllers
-├── services
-├── repositories
-├── entities
-├── dtos
-└── enums
+  ├── controllers
+  ├── DTOs
+  ├── entities
+  ├── enums
+  ├── repositories
+  └── services
+  
 ```
 
 ---
