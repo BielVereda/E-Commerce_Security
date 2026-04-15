@@ -2,7 +2,6 @@ package com.projeto.ecommerce.controllers;
 
 import com.projeto.ecommerce.DTOs.OrderDTO;
 import com.projeto.ecommerce.services.OrderService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +10,13 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/orders")
-@RequiredArgsConstructor
 public class OrderController {
 
     private final OrderService service;
+
+    public OrderController(OrderService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<OrderDTO>> findAll() {

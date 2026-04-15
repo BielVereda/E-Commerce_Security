@@ -2,18 +2,20 @@ package com.projeto.ecommerce.entities;
 
 import com.projeto.ecommerce.enums.StatusDoPedido;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Getter
-@Setter
-@NoArgsConstructor
 @Entity
-@Table(name = "tb_order")
+@Table(name = "orders")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class OrderEntity {
 
     @Id
@@ -25,10 +27,9 @@ public class OrderEntity {
     @Enumerated(EnumType.STRING)
     private StatusDoPedido status;
 
-    @ManyToOne
-    @JoinColumn(name = "cliente_id")
-    private UserEntity client;
+    private Double total;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
-    private PaymentEntity payment;
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private UserEntity client;
 }

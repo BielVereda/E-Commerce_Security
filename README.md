@@ -6,42 +6,40 @@ Este projeto implementa um backend completo com operações CRUD, relacionamento
 
 ---
 
-## 🚀 Funcionalidades
+## ✨ Funcionalidades
 
-* 👤 Gerenciamento de usuários
-* 📦 Gerenciamento de produtos
-* 🏷️ Categorias de produtos
-* 🧾 Criação e controle de pedidos
+* 👤 Gerenciamento de usuários (CRUD completo)
+* 📦 Criação e controle de pedidos
 * 💳 Registro de pagamentos
-* 🔐 Controle de perfis (ADMIN / USER)
-* 🔄 CRUD completo (Create, Read, Update, Delete)
+* 🔐 Criptografia de senhas com BCrypt
+* 📑 Uso de DTOs para entrada/saída de dados
+* 🗂️ Enums para status de pedidos e métodos de pagamento
 
 ---
 
-## 🧱 Tecnologias Utilizadas
+## 🛠️ Tecnologias Utilizadas
 
 * Java 17+
 * Spring Boot
 * Spring Data JPA
 * Hibernate
 * Lombok
-* H2 / PostgreSQL
+* MySQL
 * Maven
 * Postman
 
 ---
 
 ## 📂 Estrutura do Projeto
-
 ```
 com.projeto.ecommerce
-  ├── controllers
-  ├── DTOs
-  ├── entities
-  ├── enums
-  ├── repositories
-  └── services
-  
+    ├── controllers
+    ├── DTOs
+    ├── entities
+    ├── enums
+    ├── repositories
+    ├── services
+    └── security
 ```
 
 ---
@@ -49,318 +47,189 @@ com.projeto.ecommerce
 ## 🌐 Base URL
 
 **Local**
-```
 http://localhost:8080/
-```
-
----
-**API**
-```
-https://ecommercevereda.azurewebsites.net/
-```
-**Teste API:**
-
-<img width="580" height="248" alt="image" src="https://github.com/user-attachments/assets/55a45304-012d-4e87-96e4-96cb5ec168a4" />
 
 ---
 
-# 🔎 Endpoints da API (Local)
+# 🔑 Endpoints da API (Local)
 
 ---
 
 ## 👤 Usuários (`/users`)
 
-### 📌 Criar usuário
-
+### Criar usuário
 **POST** `/users`
 
-```json
+`json`
+```
 {
   "name": "Gabriel",
   "email": "gabriel@email.com",
-  "phone": "19999999999",
   "password": "123456",
   "roles": "USER"
 }
 ```
-![post_users.png](images/users/post_users.png)
+![post_user.png](images/user/post_user.png)
 
----
-
-### 📌 Listar usuários
-
+### Listar usuários
 **GET** `/users`
-![get_users.png](images/users/get_users.png)
----
+![get_user.png](images/user/get_user.png)
 
-### 📌 Atualizar usuário
+### Buscar por ID
+**GET** `/users/{id_user}`
+![get_user_id.png](images/user/get_user_id.png)
 
-**PUT** `/users/{id}`
+### Atualizar usuário
+**PUT** `/users/{id_user}`
 
-```json
+`json`
+```
 {
   "name": "Novo Nome",
   "email": "novo@email.com",
-  "phone": "111111111",
+  "password": "novaSenha",
   "roles": "ADMIN"
 }
 ```
-![put_users_id.png](images/users/put_users_id.png)
----
+![put_user.png](images/user/put_user.png)
 
-### 📌 Deletar usuário
+### Deletar usuário
+**DELETE** `/users/{id_user}`
+![delete_user.png](images/user/delete_user.png)
 
-**DELETE** `/users/{id}`
-![delete_users.png](images/users/delete_users.png)
----
-
-## 📦 Produtos (`/products`)
-
-### 📌 Criar produto
-
-**POST** `/products`
-
-```json
-{
-  "name": "Notebook Gamer",
-  "description": "RTX 4060, 16GB RAM",
-  "price": 7500,
-  "imgURL": "https://imagem.com/notebook.jpg",
-  "categoriesIds": ["uuid-da-categoria"]
-}
-```
-![post_products.png](images/products/post_products.png)
----
-
-### 📌 Listar produtos
-
-**GET** `/products`
-![get_products.png](images/products/get_products.png)
----
-
-### 📌 Buscar por ID
-
-**GET** `/products/{id}`
-![get_products_id.png](images/products/get_products_id.png)
----
-
-### 📌 Atualizar produto
-
-**PUT** `/products/{id}`
-
-```json
-{
-  "name": "Produto Atualizado",
-  "description": "Nova descrição",
-  "price": 999.99,
-  "imgURL": "url",
-  "categoriesIds": []
-}
-```
-![put_products_id.png](images/products/put_products_id.png)
----
-
-### 📌 Deletar produto
-
-**DELETE** `/products/{id}`
-![delete_products.png](images/products/delete_products.png)
----
-
-## 🏷️ Categorias (`/categories`)
-
-### 📌 Criar categoria
-
-**POST** `/categories`
-
-```json
-{
-  "name": "Eletrônicos"
-}
-```
-![post_categories.png](images/categories/post_categories.png)
----
-
-### 📌 Listar categorias
-
-**GET** `/categories`
-![get_categories.png](images/categories/get_categories.png)
----
-
-### 📌 Buscar por ID
-
-**GET** `/categories/{id}`
-![get_categories_id.png](images/categories/get_categories_id.png)
----
-
-### 📌 Atualizar categoria
-
-**PUT** `/categories/{id}`
-
-```json
-{
-  "name": "Nova Categoria"
-}
-```
-![put_categories_id.png](images/categories/put_categories_id.png)
----
-
-### 📌 Deletar categoria
-
-**DELETE** `/categories/{id}`
-![delete_categories.png](images/categories/delete_categories.png)
----
-
-## 🧾 Pedidos (`/orders`)
-
-### 📌 Criar pedido
-
+## 📦 Pedidos (`/orders`)
+### Criar pedido
 **POST** `/orders`
 
-```json
+`json`
+```
 {
   "status": "AWAITING_PAYMENT",
-  "clientId": "uuid-do-usuario"
+  "total": 150.00,
+  "clientId": "id_user"
 }
 ```
-![post_orders.png](images/orders/post_orders.png)
----
+![post_order.png](images/order/post_order.png)
 
-### 📌 Listar pedidos
-
+### Listar pedidos
 **GET** `/orders`
-![get_orders.png](images/orders/get_orders.png)
----
+![get_order.png](images/order/get_order.png)
 
-### 📌 Buscar por ID
+### Buscar por ID
+**GET** /`orders/{id_order}`
+![get_order_id.png](images/order/get_order_id.png)
 
-**GET** `/orders/{id}`
-![get_orders_id.png](images/orders/get_orders_id.png)
----
+### Atualizar pedido
+**PUT** `/orders/{id_order}`
 
-### 📌 Atualizar pedido
-
-**PUT** `/orders/{id}`
-
-```json
+`json`
+```
 {
   "status": "PAID",
-  "clientId": "uuid-do-usuario"
+  "total": 200.00,
+  "clientId": "id_user"
 }
 ```
-![put_orders_id.png](images/orders/put_orders_id.png)
----
+![put_order.png](images/order/put_order.png)
 
-### 📌 Deletar pedido
-
-**DELETE** `/orders/{id}`
-![delete_orders.png](images/orders/delete_orders.png)
----
+### Deletar pedido
+**DELETE** `/orders/{id_order}`
+![delete_order.png](images/order/delete_order.png)
 
 ## 💳 Pagamentos (`/payments`)
-
-### 📌 Criar pagamento
-
+### Criar pagamento
 **POST** `/payments`
 
-```json
+`json`
+```
 {
-  "orderId": "uuid-do-pedido"
+  "amount": 200.00,
+  "method": "PIX",
+  "status": "CONFIRMED",
+  "orderId": "id_order"
 }
 ```
 ![post_payments.png](images/payments/post_payments.png)
----
 
-### 📌 Listar pagamentos
-
+### Listar pagamentos
 **GET** `/payments`
 ![get_payments.png](images/payments/get_payments.png)
----
 
-### 📌 Buscar por ID
-
-**GET** `/payments/{id}`
+### Buscar por ID
+**GET** `/payments/{id_payment}`
 ![get_payments_id.png](images/payments/get_payments_id.png)
----
 
-### 📌 Atualizar pagamento
+### Atualizar pagamento
+**PUT** `/payments/{id_payment}`
 
-**PUT** `/payments/{id}`
-
-```json
+`json`
+```
 {
-  "moment": "2026-03-18"
+  "amount": 250.00,
+  "method": "CREDIT_CARD",
+  "status": "CONFIRMED",
+  "orderId": "id_order"
 }
 ```
-![put_payments_id.png](images/payments/put_payments_id.png)
----
+![put_payments.png](images/payments/put_payments.png)
 
-### 📌 Deletar pagamento
-
-**DELETE** `/payments/{id}`
+### Deletar pagamento
+**DELETE** `/payments/{id_payment}`
 ![delete_payments.png](images/payments/delete_payments.png)
----
 
-## 🗄️ Modelo de Dados
+## 🔐 Autenticação (`/auth`)
+### Login
+**POST** `/auth/login`
 
-### Principais relacionamentos:
+`json`
+```
+{
+  "email": "gabriel@email.com",
+  "password": "123456"
+}
+```
+![post_login.png](images/login/post_login.png)
 
-* Um usuário possui vários pedidos
-* Um pedido possui um pagamento
-* Um produto pode ter várias categorias
-* Relação Many-to-Many entre Produto e Categoria
+## 📊 Modelo de Dados
+- Um usuário possui vários pedidos
+- Um pedido possui um pagamento
+- Status de pedidos controlados via OrderStatus (enum)
+- Métodos de pagamento controlados via PaymentMethod (enum)
+- Perfis de acesso controlados via RoleEnum (ADMIN / USER)
 
----
-
-## ▶️ Como Rodar o Projeto
-
-### 📌 Clonar repositório
-
+## 🚀 Como Rodar o Projeto
+### Clonar repositório
 ```
 git clone https://github.com/BielVereda/Ecommerce_Aula_BackEnd.git
 ```
 
-### 📌 Entrar na pasta
-
+### Entrar na pasta
 ```
 cd ecommerce
 ```
 
-### 📌 Executar aplicação
-
+### Executar aplicação
 ```
 ./mvnw spring-boot:run
 ```
 
----
-
 ## 🧪 Testes
+### Você pode **testar os endpoints** utilizando:
+- Postman
+- Insomnia
 
-Você pode testar os endpoints utilizando:
-
-* Postman
-* Insomnia
-
----
-
-## 🧠 Melhorias Futuras
-
-* 🔐 Autenticação com JWT
-* 📦 Implementação de OrderItem (carrinho real)
-* 📄 Documentação com Swagger
-* ⚠️ Tratamento global de exceções
-* 📊 Paginação de dados
-* 🌐 Deploy (Render / Railway / AWS)
-
----
+## 🔮 Melhorias Futuras
+- Autenticação com JWT
+- Implementação de OrderItem (carrinho real)
+- Documentação com Swagger
+- Tratamento global de exceções
+- Paginação de dados
+- Deploy em serviços cloud (Render / Railway / AWS)
 
 ## 👨‍💻 Autor
-
 Desenvolvido por **BielVereda**
 
----
-
-## ⭐ Considerações Finais
-
+## 📌 Considerações Finais
 Este projeto foi desenvolvido com foco em aprendizado e boas práticas no desenvolvimento de APIs REST com Spring Boot.
 
 Sinta-se livre para contribuir, melhorar ou utilizar como base para projetos maiores 🚀

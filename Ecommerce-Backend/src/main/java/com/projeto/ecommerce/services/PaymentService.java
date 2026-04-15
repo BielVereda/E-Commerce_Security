@@ -34,7 +34,6 @@ public class PaymentService {
     public PaymentDTO findById(UUID id) {
         PaymentEntity entity = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pagamento não encontrado"));
-
         return toDTO(entity);
     }
 
@@ -44,6 +43,9 @@ public class PaymentService {
 
         PaymentEntity entity = new PaymentEntity();
         entity.setMoment(LocalDate.now());
+        entity.setAmount(dto.amount());
+        entity.setMethod(dto.method());
+        entity.setStatus(dto.status());
         entity.setOrder(order);
 
         return toDTO(repository.save(entity));
@@ -53,7 +55,23 @@ public class PaymentService {
         PaymentEntity entity = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pagamento não encontrado"));
 
-        entity.setMoment(dto.moment());
+        if (dto.moment() != null) {
+            entity.setMoment(dto.moment());
+        }
+        if (dto.amount() != null) {
+            entity.setAmount(dto.amount());
+        }
+        if (dto.method() != null) {
+            entity.setMethod(dto.method());
+        }
+        if (dto.status() != null) {
+            entity.setStatus(dto.status());
+        }
+        if (dto.orderId() != null) {
+            OrderEntity order = orderRepository.findById(dto.orderId())
+                    .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+            entity.setOrder(order);
+        }
 
         return toDTO(repository.save(entity));
     }
@@ -69,6 +87,9 @@ public class PaymentService {
         return new PaymentDTO(
                 entity.getId(),
                 entity.getMoment(),
+                entity.getAmount(),
+                entity.getMethod(),
+                entity.getStatus(),
                 entity.getOrder().getId()
         );
     }
